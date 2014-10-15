@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Logtool::VERSION
   spec.authors       = ["Jan Nelson"]
   spec.email         = ["jan@learnist.com"]
-  spec.summary       = "A suite of tools for producing various reports from information parsed out of Rails logs"
+  spec.summary       = "A suite of tools for parsing Rails and Resque logs and producing various reports"
   spec.description   = ""
   spec.homepage      = "http://github.com/learnist/logtool"
   spec.license       = "MIT"
