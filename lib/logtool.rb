@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'logging'
 
 Dir["#{File.dirname(__FILE__)}/**/*.rb"].each do |filename|
   require filename unless filename == __FILE__
