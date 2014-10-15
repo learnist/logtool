@@ -44,7 +44,7 @@ module Logtool
           unless file_basename = file_basenames_by_ip_addr[ip_addr]
             file_basename = file_basenames_by_ip_addr[ip_addr] =
               "#{output_dir}/session-%05d" % session_id
-            puts "split: discovered session #{session_id}"
+            puts "sessionize: discovered session #{session_id}"
             session_id += 1
           end
 
