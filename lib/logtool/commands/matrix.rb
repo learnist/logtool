@@ -14,7 +14,7 @@ module Logtool
         client_totals = Hash.new {|h, k| h[k] = Hash.new(0) }
         current_endpoint = nil
 
-        Logtool::Processor.new(args).run do |line|
+        Logtool::Parser.new(args).run do |line|
           case line
             when /Processing by (\S+)/
               current_endpoint = $1

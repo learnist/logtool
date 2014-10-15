@@ -11,7 +11,7 @@ module Logtool
           output = Logtool::Output.new($stdout)
         end
 
-        Logtool::TransactionCollator.new(args).run do |buffer|
+        Logtool::Collator.new(args).run do |buffer|
           output.puts buffer.lines.grep(/<root> - Started|<actioncontroller> - (Processing|Parameters|current user|rails session|user agent|Completed)|<omniauth>|FATAL/)
           output.puts
         end

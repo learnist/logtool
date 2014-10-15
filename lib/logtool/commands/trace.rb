@@ -8,7 +8,7 @@ module Logtool
           exit 1
         end
 
-        Logtool::TransactionCollator.new(args).run do |buffer|
+        Logtool::Collator.new(args).run do |buffer|
           if buffer.lines.first =~ /Started .* for #{ip_address}/
             puts buffer.lines
             puts

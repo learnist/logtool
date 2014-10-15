@@ -1,9 +1,9 @@
 module Logtool
-  class TransactionCollator
+  class Collator
     attr_reader :processor, :buffers
 
     def initialize(filenames)
-      @processor = Logtool::Processor.new(filenames)
+      @processor = Logtool::Parser.new(filenames)
       @buffers = {}
     end
 

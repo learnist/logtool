@@ -1,5 +1,5 @@
 module Logtool
-  class Processor
+  class Parser
     attr_reader :filenames
 
     def initialize(filenames)
@@ -9,12 +9,12 @@ module Logtool
 
     def run
       filenames.each do |filename|
-        debug "logtool: #{filename} started at #{Time.now}"
+        debug "parser: started #{filename} at #{Time.now}"
         Logtool::Input.new(filename).each do |line|
           yield line
         end
       end
-      debug "logtool: finished at #{Time.now}"
+      debug "parser: finished at #{Time.now}"
     end
 
     def debug(message)
