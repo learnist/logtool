@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+root_dir = File.expand_path("#{File.dirname(__FILE__)}/..")
+$LOAD_PATH.unshift "#{root_dir}/lib"
+require 'logtool'
+
+COMMANDS = Dir["#{root_dir}/lib/logtool/commands/*.rb"].map { |filename|
+  File.basename(filename, '.rb')
+}.sort
+
+def exit_with_usage(status = 1)
+  puts "Usage: "
+  COMMANDS.each do |command|
+    puts "  logtool #{command} <args>"
+  end
+  puts
+  puts "(Better help is coming soon!)"
+  exit status
+end
+
+command = ARGV.shift || exit_with_usage
+
+if command == 'help' || command == '-h'
+  exit_with_usage 0
+end
+
+unless COMMANDS.include?(command)
+  exit_with_usage
+end
+
+command_class = command.split('_').map(&:capitalize).join
+command_obj = Object.const_get("Logtool::Command::#{command_class}").new
+command_obj.run(ARGV)
