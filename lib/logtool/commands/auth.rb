@@ -5,6 +5,7 @@ module Logtool
       def run(args)
 
         if i = args.index('-o')
+          # TODO: generalize the handling of the -o option to other commands
           args.delete_at(i)
           output = Logtool::Output.new(args.delete_at(i))
         else
