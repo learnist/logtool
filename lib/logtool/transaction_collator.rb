@@ -12,6 +12,7 @@ module Logtool
 
       processor.run do |line|
         current_pid = (line =~ /^\[\S+\] \[(\d+)\]/) ? $1 : previous_pid
+        previous_pid = current_pid
 
         if line =~ /INFO <root> - Started/ ||
           line =~ /INFO <actioncontroller> - Processing/ && !buffers.has_key?(current_pid)
@@ -23,7 +24,8 @@ module Logtool
 
         if buffers.has_key?(current_pid)
           buffers[current_pid] << line
-          if line =~ /<actioncontroller> - Completed|FATAL|<omniauth> - .* Request phase initiated/
+
+          if line =~ /<actioncontroller> - Completed|<omniauth> - .* Request phase initiated/
             yield buffers.delete(current_pid)
           end
         end
