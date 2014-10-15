@@ -29,4 +29,10 @@ end
 
 command_class = command.split('_').map(&:capitalize).join
 command_obj = Object.const_get("Logtool::Command::#{command_class}").new
-command_obj.run(ARGV)
+
+begin
+  command_obj.run(ARGV)
+rescue Errno::EPIPE
+  # normal condition, do nothing
+end
+

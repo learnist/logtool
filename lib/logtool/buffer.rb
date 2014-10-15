@@ -1,13 +1,20 @@
 module Logtool
   class Buffer
-    attr_reader :lines
+    attr_reader :pid, :lines
+    attr_accessor :ip_addr, :concurrent_pids
 
-    def initialize
+    def initialize(pid)
+      @pid = pid
       @lines = []
     end
 
     def <<(line)
-      @lines << line
+      lines << line
     end
+
+    def to_s
+      lines.join("\n")
+    end
+
   end
 end

@@ -1,13 +1,22 @@
 module Logtool
   class ResqueCollator < Collator
-    def start_of_transaction?(line, pid)
-      return true if line =~ /Started #perform/
+
+    def start_of_transaction?
+      return true if current_line =~ /Started #perform/
       false
     end
 
-    def end_of_transaction?(line)
-      return true if line =~ /Completed #perform/
+    def handle_start_of_transaction
+      # do nothing
+    end
+
+    def end_of_transaction?
+      return true if current_line =~ /Completed #perform/
       false
+    end
+
+    def handle_end_of_transaction
+      # do nothing
     end
   end
 end
