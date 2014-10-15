@@ -12,7 +12,7 @@ module Logtool
           output = Logtool::Output.new($stdout)
         end
 
-        Logtool::Collator.new(args).run do |buffer|
+        Logtool::RailsCollator.new(args).run do |buffer|
           if buffer.lines[0] =~ %r{/v3/auth/twitter(/callback)?\b} ||
               buffer.lines[1] =~ /V3::AuthController#(login|logout|signup)/
             output.puts buffer.lines

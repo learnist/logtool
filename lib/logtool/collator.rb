@@ -1,21 +1,20 @@
 module Logtool
   class Collator
-    attr_reader :processor, :buffers
+    attr_reader :parser, :buffers
 
     def initialize(filenames)
-      @processor = Logtool::Parser.new(filenames)
+      @parser = Logtool::Parser.new(filenames)
       @buffers = {}
     end
 
     def run
       previous_pid = nil
 
-      processor.run do |line|
+      parser.run do |line|
         current_pid = (line =~ /^\[\S+\] \[(\d+)\]/) ? $1 : previous_pid
         previous_pid = current_pid
 
-        if line =~ /INFO <root> - Started/ ||
-          line =~ /INFO <actioncontroller> - Processing/ && !buffers.has_key?(current_pid)
+        if start_of_transaction?(line, current_pid)
           if previous_buffer = buffers.delete(current_pid)
             yield previous_buffer
           end
@@ -25,7 +24,7 @@ module Logtool
         if buffers.has_key?(current_pid)
           buffers[current_pid] << line
 
-          if line =~ /<actioncontroller> - Completed|<omniauth> - .* Request phase initiated/
+          if end_of_transaction?(line)
             yield buffers.delete(current_pid)
           end
         end
@@ -35,5 +34,6 @@ module Logtool
         yield buffer
       end
     end
+
   end
 end
