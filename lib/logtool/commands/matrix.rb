@@ -3,6 +3,20 @@ module Logtool
     class Matrix
 
       def run(args)
+        ############################################################################
+        # Load the Rails environment early in the process to make sure that it works,
+        # because it's very discouraging to get all the way through the lengthy
+        # logfile-parsing process only to find that the script blows up because the
+        # environment can't be loaded.
+
+        environment_file = "#{Dir.getwd}/config/environment.rb"
+        if File.exist?(environment_file)
+          require environment_file
+        else
+          $stderr.puts "ERROR: the 'logtool matrix' command must be invoked in a directory that houses " +
+            "a rails application. (#{environment_file} not found)"
+          exit 1
+        end
 
         ############################################################################
         # Parse the log files. The contents of the files are presumed to be in the
