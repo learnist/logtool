@@ -8,12 +8,31 @@ COMMANDS = Dir["#{root_dir}/lib/logtool/commands/*.rb"].map { |filename|
 }.sort
 
 def exit_with_usage(status = 1)
-  puts "Usage: "
-  COMMANDS.each do |command|
-    puts "  logtool #{command} <args>"
-  end
-  puts
-  puts "(Better help is coming soon!)"
+  puts <<TEXT
+
+Usage:
+
+  logtool summarize [logfiles...]
+    Parse a given set of unicorn log files and print a summarized version of their
+    contents (header and footer information for each transaction, only).
+
+  logtool trace <ip-addr> [logfiles...]
+    Parse a given set of unicorn log files and print only those messages that
+    correspond to requests that come from the given IP address.
+
+  logtool sessionize -o <output-dir> [logfiles...]
+    Parse a given set of unicorn log files, split up the log messages according to
+    user session, and create a directory populated with one log file per session.
+
+  logtool resque [logfiles...]
+    Parse a given set of resque log files and print the transactions in a collated format.
+
+TEXT
+
+  # Include these later when they're ready for prime-time:
+  # logtool matrix [logfiles...]
+  # logtool auth [logfiles...]
+
   exit status
 end
 
