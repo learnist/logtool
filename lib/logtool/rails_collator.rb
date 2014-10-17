@@ -1,3 +1,5 @@
+require 'logtool/collator'
+
 module Logtool
   class RailsCollator < Collator
     attr_reader :pids_by_ip

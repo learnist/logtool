@@ -1,3 +1,5 @@
+require 'logtool/collator'
+
 module Logtool
   class ResqueCollator < Collator
 
