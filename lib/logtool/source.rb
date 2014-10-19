@@ -1,5 +1,5 @@
 module Logtool
-  class Input
+  class Source
     attr_reader :stream
 
     def initialize(stream_or_filename = nil)

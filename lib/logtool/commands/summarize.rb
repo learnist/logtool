@@ -6,14 +6,14 @@ module Logtool
 
         if i = args.index('-o')
           args.delete_at(i)
-          output = Logtool::Output.new(args.delete_at(i))
+          sink = Logtool::Sink.new(args.delete_at(i))
         else
-          output = Logtool::Output.new($stdout)
+          sink = Logtool::Sink.new($stdout)
         end
 
         Logtool::RailsCollator.new(args).run do |buffer|
-          output.puts buffer.lines.grep(/<root> - Started|<actioncontroller> - (Processing|Parameters|current user|rails session|user agent|Completed)|<omniauth>|FATAL/)
-          output.puts
+          sink.puts buffer.lines.grep(/<root> - Started|<actioncontroller> - (Processing|Parameters|current user|rails session|user agent|Completed)|<omniauth>|FATAL/)
+          sink.puts
         end
       end
 

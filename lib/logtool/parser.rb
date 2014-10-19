@@ -10,7 +10,7 @@ module Logtool
     def run
       filenames.each do |filename|
         debug "parser: started #{filename} at #{Time.now}"
-        Logtool::Input.new(filename).each do |line|
+        Logtool::Source.new(filename).each do |line|
           yield line
         end
       end
