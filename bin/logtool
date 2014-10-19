@@ -29,10 +29,6 @@ Usage:
 
 TEXT
 
-  # Include these later when they're ready for prime-time:
-  # logtool matrix [logfiles...]
-  # logtool auth [logfiles...]
-
   exit status
 end
 
