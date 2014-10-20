@@ -1,20 +1,17 @@
 module Logtool
   class Collator
-    attr_reader :filenames, :buffers, :current_line, :current_pid
+    attr_reader :sources, :buffers, :current_line, :current_pid
 
-    def initialize(filenames)
-      @filenames = Array(filenames)
-      @filenames << '-' if @filenames.empty?  # will be interpreted as stdin
+    def initialize(sources)
+      @sources = Array(sources)
       @buffers = {}
     end
 
     def run
       previous_pid = nil
 
-      filenames.each do |filename|
-        debug "logtool: started #{filename} at #{Time.now}"
-
-        Logtool::Source.new(filename).each do |line|
+      sources.each do |source|
+        source.each do |line|
           @current_line = line
           @current_pid = (line =~ /^\[\S+\] \[(\d+)\]/) ? $1 : previous_pid
           previous_pid = current_pid

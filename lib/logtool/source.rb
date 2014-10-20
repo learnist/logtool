@@ -4,10 +4,10 @@ module Logtool
 
     def initialize(stream_or_filename = nil)
       @stream = case stream_or_filename
-        when IO then stream_or_filename
-        when nil, '-' then $stdin
-        when /\.gz$/ then IO.popen("gunzip -c #{stream_or_filename}")
-        when String then File.open(stream_or_filename)
+        when IO, StringIO  then stream_or_filename
+        when nil, '-'      then $stdin
+        when /\.gz$/       then IO.popen("gunzip -c #{stream_or_filename}")
+        when String        then File.open(stream_or_filename)
         else
           raise ArgumentError, "invalid input type: #{stream_or_filename.class}"
       end

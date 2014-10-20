@@ -11,7 +11,8 @@ module Logtool
           sink = Logtool::Sink.new($stdout)
         end
 
-        Logtool::RailsCollator.new(args).run do |buffer|
+        sources = args.map{|arg| Logtool::Source.new(arg) }
+        Logtool::RailsCollator.new(sources).run do |buffer|
           sink.puts buffer.lines.grep(/<root> - Started|<actioncontroller> - (Processing|Parameters|current user|rails session|user agent|Completed)|<omniauth>|FATAL/)
           sink.puts
         end

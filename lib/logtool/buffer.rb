@@ -13,8 +13,7 @@ module Logtool
     end
 
     def to_s
-      lines.join("\n")
+      lines.join
     end
-
   end
 end

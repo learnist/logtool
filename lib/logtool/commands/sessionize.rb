@@ -23,7 +23,8 @@ module Logtool
         file_basenames_by_ip_addr = {}
         session_id = 0
 
-        Logtool::RailsCollator.new(args).run do |buffer|
+        sources = args.map{|arg| Logtool::Source.new(arg) }
+        Logtool::RailsCollator.new(sources).run do |buffer|
           ip_addr = nil
           buffer.lines.first(6).each do |line|
             case line

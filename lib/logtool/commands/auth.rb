@@ -11,7 +11,8 @@ module Logtool
           sink = Logtool::Sink.new($stdout)
         end
 
-        Logtool::RailsCollator.new(args).run do |buffer|
+        sources = args.map{|arg| Logtool::Source.new(arg) }
+        Logtool::RailsCollator.new(sources).run do |buffer|
           if buffer.lines[0] =~ %r{/v3/auth/twitter(/callback)?\b} ||
               buffer.lines[1] =~ /V3::AuthController#(login|logout|signup)/
             sink.puts buffer.lines

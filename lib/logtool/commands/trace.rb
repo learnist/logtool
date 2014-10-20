@@ -8,7 +8,8 @@ module Logtool
           exit 1
         end
 
-        Logtool::RailsCollator.new(args).run do |buffer|
+        sources = args.map{|arg| Logtool::Source.new(arg) }
+        Logtool::RailsCollator.new(sources).run do |buffer|
           if buffer.lines.first =~ /Started .* for #{ip_address} at /
             if concurrent_pids = buffer.concurrent_pids
               noun = concurrent_pids.size == 1 ? "pid #{concurrent_pids.first}" : "pids #{concurrent_pids.inspect}"

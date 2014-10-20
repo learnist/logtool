@@ -3,7 +3,8 @@ module Logtool
     class Resque
 
       def run(args)
-        Logtool::ResqueCollator.new(args).run do |buffer|
+        sources = args.map{|arg| Logtool::Source.new(arg) }
+        Logtool::ResqueCollator.new(sources).run do |buffer|
           puts buffer.lines
           puts
         end
