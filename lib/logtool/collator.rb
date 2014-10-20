@@ -1,40 +1,45 @@
 module Logtool
   class Collator
-    attr_reader :parser, :buffers, :current_line, :current_pid
+    attr_reader :filenames, :buffers, :current_line, :current_pid
 
     def initialize(filenames)
-      @parser = Logtool::Parser.new(filenames)
+      @filenames = Array(filenames)
+      @filenames << '-' if @filenames.empty?  # will be interpreted as stdin
       @buffers = {}
     end
 
     def run
       previous_pid = nil
 
-      parser.run do |line|
-        @current_line = line
-        @current_pid = (line =~ /^\[\S+\] \[(\d+)\]/) ? $1 : previous_pid
-        previous_pid = current_pid
+      filenames.each do |filename|
+        debug "logtool: started #{filename} at #{Time.now}"
 
-        if start_of_transaction?
-          if previous_buffer = buffers.delete(current_pid)
-            yield previous_buffer
+        Logtool::Source.new(filename).each do |line|
+          @current_line = line
+          @current_pid = (line =~ /^\[\S+\] \[(\d+)\]/) ? $1 : previous_pid
+          previous_pid = current_pid
+
+          if start_of_transaction?
+            if previous_buffer = buffers.delete(current_pid)
+              yield previous_buffer
+            end
+            buffers[current_pid] = Buffer.new(current_pid)
+            handle_start_of_transaction
           end
-          buffers[current_pid] = Buffer.new(current_pid)
-          handle_start_of_transaction
+
+          if current_buffer
+            current_buffer << line
+
+            if end_of_transaction?
+              handle_end_of_transaction
+              yield buffers.delete(current_pid)
+            end
+          end
         end
 
-        if current_buffer
-          current_buffer << line
-
-          if end_of_transaction?
-            handle_end_of_transaction
-            yield buffers.delete(current_pid)
-          end
+        buffers.each_value do |buffer|
+          yield buffer
         end
-      end
-
-      buffers.each_value do |buffer|
-        yield buffer
       end
     end
 
@@ -42,6 +47,10 @@ module Logtool
 
     def current_buffer
       buffers[current_pid]
+    end
+
+    def debug(message)
+      $stderr.puts message if ENV['DEBUG']
     end
 
   end
