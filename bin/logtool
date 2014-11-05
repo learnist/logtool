@@ -20,6 +20,10 @@ Usage:
     Parse a given set of unicorn log files and print only those messages that
     correspond to requests that come from the given IP address.
 
+  logtool filter [ --include <endpoint> | --exclude <endpoint>] ...
+    Parse a given set of unicorn log files and print only those messages matched by
+    the given --include and --exclude options.
+
   logtool sessionize -o <output-dir> [logfiles...]
     Parse a given set of unicorn log files, split up the log messages according to
     user session, and create a directory populated with one log file per session.
