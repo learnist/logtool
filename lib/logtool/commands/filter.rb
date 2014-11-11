@@ -17,9 +17,9 @@ module Logtool
         end
 
         sources = args.map{|arg| Logtool::Source.new(arg) }
+
         Logtool::RailsCollator.new(sources).run do |buffer|
-          endpoint = buffer.lines[1][/Processing by (\S+)/, 1]
-          raise "oops" if endpoint.nil?
+          next unless endpoint = buffer.lines[1][/Processing by (\S+)/, 1]
 
           if (inclusions.empty? || inclusions.include?(endpoint)) && !exclusions.include?(endpoint)
             puts buffer
