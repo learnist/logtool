@@ -21,11 +21,15 @@ module Logtool
         Logtool::RailsCollator.new(sources).run do |buffer|
           next unless endpoint = buffer.lines[1][/Processing by (\S+)/, 1]
 
-          if (inclusions.empty? || inclusions.include?(endpoint)) && !exclusions.include?(endpoint)
+          if (inclusions.empty? || any_match?(inclusions, endpoint)) && !any_match?(exclusions, endpoint)
             puts buffer
             puts
           end
         end
+      end
+
+      def any_match?(patterns, endpoint)
+        patterns.any?{|pattern| Regexp.new(pattern).match(endpoint)  }
       end
 
       def exit_with_usage
